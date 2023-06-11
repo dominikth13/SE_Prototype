@@ -10,14 +10,31 @@ class ShoppingListWidget extends StatefulWidget {
 }
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
-
   final List<ShoppingListItem> _products = <ShoppingListItem>[];
 
-  final TextEditingController _addProductNameController = TextEditingController();
+  void _delete(ShoppingListItem product) {
+    _products.remove(product);
+
+    setState(() {
+      _products;
+    });
+  }
+
+  final TextEditingController _addProductNameController =
+      TextEditingController();
+
+  _ShoppingListWidgetState() {
+    _products
+        .add(ShoppingListItem("Butter", "Kerrygold", ItemState.EMPTY, true));
+    _products.add(ShoppingListItem(
+        "Classic Tabs", "Denkmit (DM)", ItemState.EMPTY, true));
+  }
 
   void _addProduct(String name) {
-    _products.add(ShoppingListItem(name, ItemState.CUSTOM, true));
-    
+    //TODO implement
+    String brand = "Example Brand";
+    _products.add(ShoppingListItem(name, brand, ItemState.CUSTOM, true));
+
     setState(() {
       _products;
     });
@@ -36,8 +53,13 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
       children: <Widget>[
         Expanded(
           child: ListView(
-            children: _products.map((item) => ShoppingListItemWidget(item)).toList()
-          ),
+              children: _products
+                  .map((item) => ShoppingListItemWidget(
+                        item,
+                        onPressDelete: (ShoppingListItem product) =>
+                            _delete(product),
+                      ))
+                  .toList()),
         ),
         Container(
           height: 100,
@@ -58,7 +80,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
                   ),
                 ),
                 ElevatedButton(
-                child: const Text("Add"),
+                  child: const Text("Add"),
                   onPressed: () {
                     _addProduct(_addProductNameController.text);
                     _addProductNameController.text = "";
