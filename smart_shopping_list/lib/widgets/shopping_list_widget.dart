@@ -24,10 +24,17 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
       TextEditingController();
 
   _ShoppingListWidgetState() {
+    //Fill some mock values
     _products
         .add(ShoppingListItem("Butter", "Kerrygold", ItemState.EMPTY, true));
     _products.add(ShoppingListItem(
         "Classic Tabs", "Denkmit (DM)", ItemState.EMPTY, true));
+    _products.add(ShoppingListItem(
+        "Weizenmehl", "Bioland", ItemState.MAYBE_EMPTY, false));
+    _products.add(ShoppingListItem(
+        "Toilettenpapier", "Floralys", ItemState.MAYBE_EMPTY, false));
+    _products.add(
+        ShoppingListItem("Goldbären", "Haribo", ItemState.MAYBE_EMPTY, false));
   }
 
   void _addProduct(String name) {
