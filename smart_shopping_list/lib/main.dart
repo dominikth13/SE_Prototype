@@ -1,12 +1,25 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/widgets/inventory_widget.dart';
 import 'package:smart_shopping_list/widgets/shopping_list_widget.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
+  runApp(MyApp(firstCamera));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp(this.camera, {super.key});
+
+  final camera;
 
   // This widget is the root of your application.
   @override
@@ -25,13 +38,16 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Smart Shopping List'),
+      home: MyHomePage(
+        title: 'Smart Shopping List',
+        camera: camera,
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.camera});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -43,16 +59,31 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final camera;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
+
+  Widget _widget() {
+    final widgetOptions = [
+      ShoppingListWidget(),
+      InventoryWidget(widget.camera),
+    ];
+    return widgetOptions.elementAt(_selectedIndex);
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
@@ -63,7 +94,17 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: ShoppingListWidget(),
+      body: _widget(),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_bag), label: "Shopping List"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.inventory), label: "Your Inventory"),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
