@@ -1,7 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/models/inventory_item.dart';
+import 'package:smart_shopping_list/models/shopping_list_item.dart';
+import 'package:smart_shopping_list/widgets/camera_widget.dart';
 import 'package:smart_shopping_list/widgets/inventory_widget.dart';
 import 'package:smart_shopping_list/widgets/shopping_list_widget.dart';
+
+import 'models/item_state.dart';
+import 'models/unit.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -9,17 +15,26 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Obtain a list of the available cameras on the device.
-  final cameras = await availableCameras();
-
-  // Get a specific camera from the list of available cameras.
-  final firstCamera = cameras.first;
-  runApp(MyApp(firstCamera));
+  final List<CameraDescription> cameras = await availableCameras();
+  runApp(MyApp(cameras));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp(this.camera, {super.key});
+  const MyApp(this.cameras, {super.key});
 
-  final camera;
+  final List<CameraDescription> cameras;
+  static List<InventoryItem> inventory = [
+    InventoryItem("Staubmagnet Ersatztücher", "Swiffer", Unit.PARTS, 20),
+    InventoryItem("Strauchtomaten", "Lidl", Unit.GRAMS, 300)
+  ];
+  static List<ShoppingListItem> shoppingList = [
+    ShoppingListItem("Butter", "Kerrygold", ItemState.EMPTY, true),
+    ShoppingListItem("Classic Tabs", "Denkmit (DM)", ItemState.EMPTY, true),
+    ShoppingListItem("Weizenmehl", "Bioland", ItemState.MAYBE_EMPTY, false),
+    ShoppingListItem(
+        "Toilettenpapier", "Floralys", ItemState.MAYBE_EMPTY, false),
+    ShoppingListItem("Goldbären", "Haribo", ItemState.MAYBE_EMPTY, false),
+  ];
 
   // This widget is the root of your application.
   @override
@@ -40,14 +55,14 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(
         title: 'Smart Shopping List',
-        camera: camera,
+        cameras: cameras,
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.camera});
+  const MyHomePage({super.key, required this.title, required this.cameras});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -59,7 +74,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  final camera;
+  final cameras;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -67,11 +82,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  bool _showCamera = false;
 
-  Widget _widget() {
+  Widget _page() {
     final widgetOptions = [
-      ShoppingListWidget(),
-      InventoryWidget(widget.camera),
+      const ShoppingListWidget(),
+      const InventoryWidget(),
+      CameraWidget(
+        cameras: widget.cameras,
+        show: _showCamera,
+      ),
     ];
     return widgetOptions.elementAt(_selectedIndex);
   }
@@ -94,13 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: _widget(),
+      body: _page(),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag), label: "Shopping List"),
           BottomNavigationBarItem(
               icon: Icon(Icons.inventory), label: "Your Inventory"),
+          BottomNavigationBarItem(icon: Icon(Icons.camera_alt), label: "Scan")
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

@@ -30,6 +30,7 @@ environment:
 dependencies:
   camera:
   path_provider:
+  video_player: ^2.1.4
   path:
   flutter:
     sdk: flutter

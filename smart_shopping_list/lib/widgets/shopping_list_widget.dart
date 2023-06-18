@@ -3,47 +3,35 @@ import 'package:smart_shopping_list/models/item_state.dart';
 import 'package:smart_shopping_list/widgets/shopping_list_item_widget.dart';
 
 import '../models/shopping_list_item.dart';
+import '../main.dart';
 
 class ShoppingListWidget extends StatefulWidget {
+  const ShoppingListWidget({super.key});
+
   @override
   State<StatefulWidget> createState() => _ShoppingListWidgetState();
 }
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
-  final List<ShoppingListItem> _products = <ShoppingListItem>[];
-
   void _delete(ShoppingListItem product) {
-    _products.remove(product);
+    MyApp.shoppingList.remove(product);
 
     setState(() {
-      _products;
+      MyApp.shoppingList;
     });
   }
 
   final TextEditingController _addProductNameController =
       TextEditingController();
 
-  _ShoppingListWidgetState() {
-    //Fill some mock values
-    _products
-        .add(ShoppingListItem("Butter", "Kerrygold", ItemState.EMPTY, true));
-    _products.add(ShoppingListItem(
-        "Classic Tabs", "Denkmit (DM)", ItemState.EMPTY, true));
-    _products.add(ShoppingListItem(
-        "Weizenmehl", "Bioland", ItemState.MAYBE_EMPTY, false));
-    _products.add(ShoppingListItem(
-        "Toilettenpapier", "Floralys", ItemState.MAYBE_EMPTY, false));
-    _products.add(
-        ShoppingListItem("Goldbären", "Haribo", ItemState.MAYBE_EMPTY, false));
-  }
-
   void _addProduct(String name) {
     //TODO implement
     String brand = "Example Brand";
-    _products.add(ShoppingListItem(name, brand, ItemState.CUSTOM, true));
+    MyApp.shoppingList
+        .add(ShoppingListItem(name, brand, ItemState.CUSTOM, true));
 
     setState(() {
-      _products;
+      MyApp.shoppingList;
     });
   }
 
@@ -60,7 +48,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
       children: <Widget>[
         Expanded(
           child: ListView(
-              children: _products
+              children: MyApp.shoppingList
                   .map((item) => ShoppingListItemWidget(
                         item,
                         onPressDelete: (ShoppingListItem product) =>
