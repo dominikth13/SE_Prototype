@@ -51,8 +51,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
               children: MyApp.shoppingList
                   .map((item) => ShoppingListItemWidget(
                         item,
-                        onPressDelete: (ShoppingListItem product) =>
-                            _delete(product),
+                        onPressDelete: _delete,
                       ))
                   .toList()),
         ),

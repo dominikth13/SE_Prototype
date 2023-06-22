@@ -1,16 +1,13 @@
 // A screen that allows users to take a picture using a given camera.
 // Heavily inspired by official Flutter tutorial on how to setup a camera app https://github.com/flutter/packages/blob/main/packages/camera/camera/README.md
 import 'dart:io';
-import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:smart_shopping_list/models/inventory_item.dart';
 import 'package:smart_shopping_list/widgets/inventory_changes_widget.dart';
-import 'package:video_player/video_player.dart';
 
 import '../models/unit.dart';
 
@@ -19,10 +16,12 @@ class CameraWidget extends StatefulWidget {
     super.key,
     required this.cameras,
     required this.show,
+    required this.proceedToInventory,
   });
 
   final List<CameraDescription> cameras;
   final bool show;
+  final Function() proceedToInventory;
 
   @override
   _CameraWidgetState createState() => _CameraWidgetState();
@@ -74,7 +73,7 @@ class _CameraWidgetState extends State<CameraWidget>
   // Show settings menu?
   bool _showSettings = false;
 
-  //
+  // Show add products screen
   List<InventoryItem> _scannedItems = [];
   bool _showChanges = false;
 
@@ -141,7 +140,11 @@ class _CameraWidgetState extends State<CameraWidget>
   @override
   Widget build(BuildContext context) {
     return _showChanges
-        ? InventoryChangesWidget(itemsToAdd: _scannedItems)
+        ? InventoryChangesWidget(
+            itemsToAdd: _scannedItems,
+            onPressAbort: _onPressAbort,
+            proceedToInventory: widget.proceedToInventory,
+          )
         : imageFile == null
             ? _takePhotoWidget()
             : _photoReviewWidget();
@@ -193,22 +196,23 @@ class _CameraWidgetState extends State<CameraWidget>
           ),
         ),
         Expanded(
-            flex: 2,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                ElevatedButton.icon(
-                  onPressed: _resetImage,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text("Try again"),
-                ),
-                ElevatedButton.icon(
-                  onPressed: _scanImage,
-                  icon: const Icon(Icons.check),
-                  label: const Text("Accept"),
-                )
-              ],
-            )),
+          flex: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ElevatedButton.icon(
+                onPressed: _resetImage,
+                icon: const Icon(Icons.refresh),
+                label: const Text("Try again"),
+              ),
+              ElevatedButton.icon(
+                onPressed: _scanImage,
+                icon: const Icon(Icons.check),
+                label: const Text("Accept"),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -877,6 +881,16 @@ class _CameraWidgetState extends State<CameraWidget>
       InventoryItem("Vollmilch", "Milbona", Unit.LITRE, 1),
     ];
     _showChanges = true;
+
+    setState(() {
+      _scannedItems;
+      _showChanges;
+    });
+  }
+
+  void _onPressAbort() {
+    _scannedItems = [];
+    _showChanges = false;
 
     setState(() {
       _scannedItems;
