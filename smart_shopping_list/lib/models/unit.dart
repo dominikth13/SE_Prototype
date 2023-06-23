@@ -1,7 +1,7 @@
 enum Unit {
-  GRAMS("grams"),
+  GRAM("gram"),
   LITRE("litre"),
-  PARTS("parts");
+  PART("part");
 
   const Unit(this.code);
 
@@ -9,14 +9,18 @@ enum Unit {
 
   static Unit? findByCode(String code) {
     switch (code) {
-      case "grams":
-        return Unit.GRAMS;
+      case "gram":
+        return Unit.GRAM;
       case "litre":
         return Unit.LITRE;
-      case "parts":
-        return Unit.PARTS;
+      case "part":
+        return Unit.PART;
       default:
         return null;
     }
+  }
+
+  String getOutputName() {
+    return "$code(s)";
   }
 }

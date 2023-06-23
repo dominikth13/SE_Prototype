@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
 
   final List<CameraDescription> cameras;
   static List<InventoryItem> inventory = [
-    InventoryItem("Staubmagnet Ersatztücher", "Swiffer", Unit.PARTS, 20),
-    InventoryItem("Strauchtomaten", "Lidl", Unit.GRAMS, 300)
+    InventoryItem("Staubmagnet Ersatztücher", "Swiffer", Unit.PART, 20),
+    InventoryItem("Strauchtomaten", "Lidl", Unit.GRAM, 300)
   ];
   static List<ShoppingListItem> shoppingList = [
     ShoppingListItem("Butter", "Kerrygold", ItemState.EMPTY, true),

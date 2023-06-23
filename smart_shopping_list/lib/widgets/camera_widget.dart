@@ -878,7 +878,7 @@ class _CameraWidgetState extends State<CameraWidget>
   void _scanImage() {
     _scannedItems = [
       InventoryItem("Cola", "Coca-Cola", Unit.LITRE, 0.5),
-      InventoryItem("Vollmilch", "Milbona", Unit.LITRE, 1),
+      InventoryItem("Vollmilch", "Milbona", Unit.PART, 1),
     ];
     _showChanges = true;
 

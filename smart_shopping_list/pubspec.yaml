@@ -32,6 +32,7 @@ dependencies:
   path_provider:
   video_player: ^2.1.4
   path:
+  rainbow_color:
   flutter:
     sdk: flutter
 
