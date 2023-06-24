@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smart_shopping_list/main.dart';
+import 'package:smart_shopping_list/models/inventory_item.dart';
 import 'package:smart_shopping_list/models/item_state.dart';
+import 'package:smart_shopping_list/models/product.dart';
 
 import '../models/shopping_list_item.dart';
 
@@ -28,8 +30,18 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
     widget.onChangeItem();
   }
 
-  void _delete(ShoppingListItem product) {
-    MyApp.shoppingList.remove(product);
+  void _removeSuggestion() {
+    _delete();
+    Product product = widget.shoppingListItem.product;
+    MyApp.inventory.add(InventoryItem.forTesting(
+        product.brand, product.brand, product.unit, product.size, 0.2));
+    setState(() {
+      MyApp.inventory;
+    });
+  }
+
+  void _delete() {
+    MyApp.shoppingList.remove(widget.shoppingListItem);
 
     setState(() {
       MyApp.shoppingList;
@@ -77,7 +89,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           children: [
             IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () => _delete(widget.shoppingListItem),
+              onPressed: _removeSuggestion,
             ),
             IconButton(
               icon: const Icon(Icons.check),
@@ -91,7 +103,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           children: [
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () => _delete(widget.shoppingListItem),
+              onPressed: _delete,
             ),
           ],
         );
