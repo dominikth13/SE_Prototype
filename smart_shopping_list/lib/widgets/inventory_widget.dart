@@ -18,7 +18,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
   void initState() {
     super.initState();
     _itemsRendered = List.from(MyApp.inventory);
-    _onChangeItemsRendered();
+    _onChangeItemsRendered(null);
   }
 
   void _onChangeSearchBar(query) {
@@ -31,10 +31,14 @@ class _InventoryWidgetState extends State<InventoryWidget> {
           element.product.brand.contains(query));
     }
 
-    _onChangeItemsRendered();
+    _onChangeItemsRendered(null);
   }
 
-  void _onChangeItemsRendered() {
+  void _onChangeItemsRendered(InventoryItem? deleteMe) {
+    if (deleteMe != null) {
+      MyApp.inventory.remove(deleteMe);
+      _itemsRendered = List.from(MyApp.inventory);
+    }
     _itemsRendered = _sortedItems();
 
     setState(() {

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rainbow_color/rainbow_color.dart';
+import 'package:smart_shopping_list/main.dart';
 import 'package:smart_shopping_list/models/inventory_item.dart';
+import 'package:smart_shopping_list/models/item_state.dart';
+import 'package:smart_shopping_list/models/product.dart';
+import 'package:smart_shopping_list/models/shopping_list_item.dart';
 
 import '../models/unit.dart';
 
 class InventoryItemWidget extends StatefulWidget {
   final InventoryItem inventoryItem;
-  final Function() onChangeItem;
+  final Function(InventoryItem? deleteMe) onChangeItem;
 
   const InventoryItemWidget(this.inventoryItem,
       {super.key, required this.onChangeItem});
@@ -50,12 +54,18 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
     widget.inventoryItem.product.size = double.parse(_sizeController.text);
     widget.inventoryItem
         .setRemainingAmountBySize(double.parse(_remainingController.text));
+    if (widget.inventoryItem.remainingAmount == 0) {
+      Product product = widget.inventoryItem.product;
+      MyApp.shoppingList.add(ShoppingListItem(product.name, product.brand,
+          product.unit, product.size, ItemState.EMPTY));
+      widget.onChangeItem(widget.inventoryItem);
+    }
     Navigator.pop(context);
 
     setState(() {
       widget.inventoryItem;
     });
-    widget.onChangeItem();
+    widget.onChangeItem(null);
   }
 
   List<DropdownMenuItem<String>> _units() {

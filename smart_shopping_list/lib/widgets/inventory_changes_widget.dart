@@ -34,7 +34,10 @@ class _InventoryChangesWidgetState extends State<InventoryChangesWidget> {
     });
   }
 
-  void _onChangeItems() {
+  void _onChangeItems(InventoryItem? deleteMe) {
+    if (deleteMe != null) {
+      widget.itemsToAdd.remove(deleteMe);
+    }
     widget.itemsToAdd = _sortedItems();
 
     setState(() {
