@@ -20,7 +20,8 @@ class _InventoryWidgetState extends State<InventoryWidget> {
     } else {
       _itemsRendered = List.from(MyApp.inventory);
       _itemsRendered.retainWhere((element) =>
-          element.name.contains(query) || element.brand.contains(query));
+          element.product.name.contains(query) ||
+          element.product.brand.contains(query));
     }
 
     setState(() {
@@ -29,14 +30,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
   }
 
   List<InventoryItem> _sortedItems() {
-    _itemsRendered.forEach((element) {
-      print(element.name);
-    });
-    //TODO change sorting
     _itemsRendered.sort();
-    _itemsRendered.forEach((element) {
-      print(element.name);
-    });
     return _itemsRendered;
   }
 

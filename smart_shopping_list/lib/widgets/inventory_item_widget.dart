@@ -23,10 +23,10 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.inventoryItem.name;
-    _brandController.text = widget.inventoryItem.brand;
-    _unitValue = widget.inventoryItem.unit.code;
-    _sizeController.text = widget.inventoryItem.size.toString();
+    _nameController.text = widget.inventoryItem.product.name;
+    _brandController.text = widget.inventoryItem.product.brand;
+    _unitValue = widget.inventoryItem.product.unit.code;
+    _sizeController.text = widget.inventoryItem.product.size.toString();
     _remainingController.text =
         widget.inventoryItem.getRemainingSize().toString();
   }
@@ -42,10 +42,10 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
   }
 
   void _changeValues() {
-    widget.inventoryItem.name = _nameController.text;
-    widget.inventoryItem.brand = _brandController.text;
-    widget.inventoryItem.unit = Unit.findByCode(_unitValue)!;
-    widget.inventoryItem.size = double.parse(_sizeController.text);
+    widget.inventoryItem.product.name = _nameController.text;
+    widget.inventoryItem.product.brand = _brandController.text;
+    widget.inventoryItem.product.unit = Unit.findByCode(_unitValue)!;
+    widget.inventoryItem.product.size = double.parse(_sizeController.text);
     widget.inventoryItem
         .setRemainingAmountBySize(double.parse(_remainingController.text));
     Navigator.pop(context);
@@ -146,11 +146,11 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
 
   Color _tileColor() {
     var rb = Rainbow(spectrum: [
-      Color.fromARGB(255, 22, 184, 1),
-      Color.fromARGB(255, 161, 197, 1),
-      Color.fromARGB(255, 218, 185, 1),
-      Color.fromARGB(255, 252, 169, 2),
-      Color.fromARGB(255, 230, 92, 0)
+      const Color.fromARGB(255, 22, 184, 1),
+      const Color.fromARGB(255, 161, 197, 1),
+      const Color.fromARGB(255, 218, 185, 1),
+      const Color.fromARGB(255, 252, 169, 2),
+      const Color.fromARGB(255, 230, 92, 0)
     ], rangeStart: 1.0, rangeEnd: 0.0);
 
     return rb[widget.inventoryItem.remainingAmount];
@@ -163,8 +163,8 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
         children: <Widget>[
           Expanded(
             child: ListTile(
-              title: Text(widget.inventoryItem.name),
-              subtitle: Text(widget.inventoryItem.brand),
+              title: Text(widget.inventoryItem.product.name),
+              subtitle: Text(widget.inventoryItem.product.brand),
               tileColor: _tileColor(), //TODO
               textColor: Colors.white, //TODO
               shape: const RoundedRectangleBorder(
@@ -178,8 +178,8 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
                 children: [
                   ElevatedButton.icon(
                     onPressed: _showEditDialog,
-                    icon: Icon(Icons.edit),
-                    label: Text(""),
+                    icon: const Icon(Icons.edit),
+                    label: const Text(""),
                   ),
                 ],
               ),
@@ -190,8 +190,8 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
                     children: [
                       Text(widget.inventoryItem.getRemainingSize().toString()),
                       Text(
-                        widget.inventoryItem.unit.getOutputName(),
-                        style: TextStyle(
+                        widget.inventoryItem.product.unit.getOutputName(),
+                        style: const TextStyle(
                             fontSize: 12,
                             color: Color.fromARGB(255, 211, 210, 210)),
                       ),

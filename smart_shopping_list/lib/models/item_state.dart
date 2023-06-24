@@ -1,3 +1,5 @@
 enum ItemState {
-  MAYBE_EMPTY, EMPTY, CUSTOM;
+  MAYBE_EMPTY,
+  EMPTY,
+  CUSTOM;
 }

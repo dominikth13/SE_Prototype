@@ -1,9 +1,13 @@
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/models/inventory_item.dart';
 import 'package:smart_shopping_list/models/item_state.dart';
+import 'package:smart_shopping_list/models/product.dart';
 import 'package:smart_shopping_list/widgets/shopping_list_item_widget.dart';
 
 import '../models/shopping_list_item.dart';
 import '../main.dart';
+import '../models/unit.dart';
 
 class ShoppingListWidget extends StatefulWidget {
   const ShoppingListWidget({super.key});
@@ -13,25 +17,38 @@ class ShoppingListWidget extends StatefulWidget {
 }
 
 class _ShoppingListWidgetState extends State<ShoppingListWidget> {
-  void _delete(ShoppingListItem product) {
-    MyApp.shoppingList.remove(product);
+  final TextEditingController _addProductNameController =
+      TextEditingController();
+  final SingleValueDropDownController _svdc = SingleValueDropDownController();
+  List<ShoppingListItem> _items = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _items = _sortedItems();
+  }
+
+  void _addProduct() {
+    Product? product = _svdc.dropDownValue?.value;
+    if (product == null) {
+      return;
+    }
+
+    MyApp.shoppingList.add(ShoppingListItem(product.name, product.brand,
+        product.unit, product.size, ItemState.CUSTOM));
+    _svdc.dropDownValue = null;
 
     setState(() {
       MyApp.shoppingList;
     });
+    _onChangeItems();
   }
 
-  final TextEditingController _addProductNameController =
-      TextEditingController();
-
-  void _addProduct(String name) {
-    //TODO implement
-    String brand = "Example Brand";
-    MyApp.shoppingList
-        .add(ShoppingListItem(name, brand, ItemState.CUSTOM, true));
-
+  void _onChangeItems() {
+    _items = _sortedItems();
     setState(() {
-      MyApp.shoppingList;
+      _items;
     });
   }
 
@@ -39,7 +56,34 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _addProductNameController.dispose();
+    _svdc.dispose();
     super.dispose();
+  }
+
+  List<DropDownValueModel> _options() {
+    final List<Product> _optionMock = [
+      Product("Feinschmecker-Salami", "Wiltmann", Unit.GRAM, 80),
+      Product("Salami Kralovsky", "Kostelec", Unit.GRAM, 380),
+      Product("Salami", "Wilhelm Brandenburg", Unit.GRAM, 80),
+      Product("Salami", "Die Thüringer", Unit.GRAM, 100),
+      Product("Waschmittel Renew Schwarz", "Perwoll", Unit.LITRE, 1.375),
+      Product("Colorwaschmittel Renew", "Perwoll", Unit.LITRE, 1.375),
+      Product("Vollwaschmittel Universal Kraft-Gel", "Persil", Unit.LITRE, 0.9),
+      Product("Colorwaschmittel All-in-1 Pods", "Ariel", Unit.GRAM, 306),
+    ];
+    _optionMock.sort();
+
+    return _optionMock
+        .map((e) => DropDownValueModel(
+            name: e.toString(), value: e, toolTipMsg: "Moin"))
+        .toList();
+  }
+
+  List<ShoppingListItem> _sortedItems() {
+    List<ShoppingListItem> items = List.from(MyApp.shoppingList);
+    items.sort();
+
+    return items;
   }
 
   @override
@@ -48,40 +92,50 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
       children: <Widget>[
         Expanded(
           child: ListView(
-              children: MyApp.shoppingList
-                  .map((item) => ShoppingListItemWidget(
-                        item,
-                        onPressDelete: _delete,
-                      ))
-                  .toList()),
+            children: _items
+                .map((e) =>
+                    ShoppingListItemWidget(e, onChangeItem: _onChangeItems))
+                .toList(),
+          ),
         ),
         Container(
           height: 100,
-          color: Colors.blue,
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                  width: 250,
-                  child: TextField(
-                    controller: _addProductNameController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Product",
-                    ),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            color: Colors.blue,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: SizedBox(
+                  width: 300,
+                  child: DropDownTextField(
+                    dropDownList: _options(),
+                    enableSearch: true,
+                    controller: _svdc,
+                    dropDownItemCount: 4,
                   ),
                 ),
-                ElevatedButton(
-                  child: const Text("Add"),
-                  onPressed: () {
-                    _addProduct(_addProductNameController.text);
-                    _addProductNameController.text = "";
-                  },
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: ElevatedButton(
+                  onPressed: _addProduct,
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(20),
+                    backgroundColor: Colors.blue, // <-- Button color
+                    foregroundColor: Colors.grey, // <-- Splash color
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

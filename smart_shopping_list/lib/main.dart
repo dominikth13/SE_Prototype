@@ -25,15 +25,18 @@ class MyApp extends StatelessWidget {
   final List<CameraDescription> cameras;
   static List<InventoryItem> inventory = [
     InventoryItem("Staubmagnet Ersatztücher", "Swiffer", Unit.PART, 20),
-    InventoryItem("Strauchtomaten", "Lidl", Unit.GRAM, 300)
+    InventoryItem.forTesting("Strauchtomaten", "Lidl", Unit.GRAM, 300, 0.75),
   ];
   static List<ShoppingListItem> shoppingList = [
-    ShoppingListItem("Butter", "Kerrygold", ItemState.EMPTY, true),
-    ShoppingListItem("Classic Tabs", "Denkmit (DM)", ItemState.EMPTY, true),
-    ShoppingListItem("Weizenmehl", "Bioland", ItemState.MAYBE_EMPTY, false),
+    ShoppingListItem("Butter", "Kerrygold", Unit.GRAM, 250, ItemState.EMPTY),
     ShoppingListItem(
-        "Toilettenpapier", "Floralys", ItemState.MAYBE_EMPTY, false),
-    ShoppingListItem("Goldbären", "Haribo", ItemState.MAYBE_EMPTY, false),
+        "Classic Tabs", "Denkmit (DM)", Unit.PART, 65, ItemState.EMPTY),
+    ShoppingListItem(
+        "Weizenmehl", "Bioland", Unit.GRAM, 1000, ItemState.MAYBE_EMPTY),
+    ShoppingListItem("Toilettenpapier 4-lagig", "Floralys", Unit.PART, 10,
+        ItemState.MAYBE_EMPTY),
+    ShoppingListItem(
+        "Goldbären", "Haribo", Unit.GRAM, 75, ItemState.MAYBE_EMPTY),
   ];
 
   // This widget is the root of your application.

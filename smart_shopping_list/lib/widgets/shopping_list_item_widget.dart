@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/main.dart';
 import 'package:smart_shopping_list/models/item_state.dart';
 
 import '../models/shopping_list_item.dart';
 
 class ShoppingListItemWidget extends StatefulWidget {
   final ShoppingListItem shoppingListItem;
-  final Function(ShoppingListItem product) onPressDelete;
+  final Function() onChangeItem;
 
   const ShoppingListItemWidget(
     this.shoppingListItem, {
     super.key,
-    required this.onPressDelete,
+    required this.onChangeItem,
   });
 
   @override
@@ -24,6 +25,16 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
     setState(() {
       widget.shoppingListItem.state;
     });
+    widget.onChangeItem();
+  }
+
+  void _delete(ShoppingListItem product) {
+    MyApp.shoppingList.remove(product);
+
+    setState(() {
+      MyApp.shoppingList;
+    });
+    widget.onChangeItem();
   }
 
   Column _icon() {
@@ -66,7 +77,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           children: [
             IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () => widget.onPressDelete(widget.shoppingListItem),
+              onPressed: () => _delete(widget.shoppingListItem),
             ),
             IconButton(
               icon: const Icon(Icons.check),
@@ -80,7 +91,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           children: [
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () => widget.onPressDelete(widget.shoppingListItem),
+              onPressed: () => _delete(widget.shoppingListItem),
             ),
           ],
         );
@@ -114,8 +125,8 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
         children: <Widget>[
           Expanded(
             child: ListTile(
-                title: Text(widget.shoppingListItem.name),
-                subtitle: Text(widget.shoppingListItem.brand),
+                title: Text(widget.shoppingListItem.product.name),
+                subtitle: Text(widget.shoppingListItem.product.brand),
                 tileColor: _tileColor(),
                 textColor: _textColor(),
                 shape: const RoundedRectangleBorder(
