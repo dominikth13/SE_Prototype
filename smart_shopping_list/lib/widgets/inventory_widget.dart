@@ -12,7 +12,14 @@ class InventoryWidget extends StatefulWidget {
 }
 
 class _InventoryWidgetState extends State<InventoryWidget> {
-  List<InventoryItem> _itemsRendered = List.from(MyApp.inventory);
+  List<InventoryItem> _itemsRendered = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _itemsRendered = List.from(MyApp.inventory);
+    _onChangeItemsRendered();
+  }
 
   void _onChangeSearchBar(query) {
     if (query == "") {
@@ -23,6 +30,12 @@ class _InventoryWidgetState extends State<InventoryWidget> {
           element.product.name.contains(query) ||
           element.product.brand.contains(query));
     }
+
+    _onChangeItemsRendered();
+  }
+
+  void _onChangeItemsRendered() {
+    _itemsRendered = _sortedItems();
 
     setState(() {
       _itemsRendered;
@@ -43,8 +56,11 @@ class _InventoryWidgetState extends State<InventoryWidget> {
         ),
         Expanded(
           child: ListView(
-              children: _sortedItems()
-                  .map((item) => InventoryItemWidget(item))
+              children: _itemsRendered
+                  .map((item) => InventoryItemWidget(
+                        item,
+                        onChangeItem: _onChangeItemsRendered,
+                      ))
                   .toList()),
         ),
       ],

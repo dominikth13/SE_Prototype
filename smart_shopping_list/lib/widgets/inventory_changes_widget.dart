@@ -5,11 +5,11 @@ import 'package:smart_shopping_list/models/inventory_item.dart';
 import 'inventory_item_widget.dart';
 
 class InventoryChangesWidget extends StatefulWidget {
-  final List<InventoryItem> itemsToAdd;
+  List<InventoryItem> itemsToAdd;
   final Function() onPressAbort;
   final Function() proceedToInventory;
 
-  const InventoryChangesWidget(
+  InventoryChangesWidget(
       {super.key,
       required this.itemsToAdd,
       required this.onPressAbort,
@@ -20,6 +20,11 @@ class InventoryChangesWidget extends StatefulWidget {
 }
 
 class _InventoryChangesWidgetState extends State<InventoryChangesWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _addProducts() {
     MyApp.inventory.addAll(widget.itemsToAdd);
 
@@ -27,6 +32,19 @@ class _InventoryChangesWidgetState extends State<InventoryChangesWidget> {
     setState(() {
       MyApp.inventory;
     });
+  }
+
+  void _onChangeItems() {
+    widget.itemsToAdd = _sortedItems();
+
+    setState(() {
+      widget.itemsToAdd;
+    });
+  }
+
+  List<InventoryItem> _sortedItems() {
+    widget.itemsToAdd.sort();
+    return widget.itemsToAdd;
   }
 
   @override
@@ -37,7 +55,10 @@ class _InventoryChangesWidgetState extends State<InventoryChangesWidget> {
           flex: 10,
           child: ListView(
               children: widget.itemsToAdd
-                  .map((item) => InventoryItemWidget(item))
+                  .map((item) => InventoryItemWidget(
+                        item,
+                        onChangeItem: _onChangeItems,
+                      ))
                   .toList()),
         ),
         Expanded(

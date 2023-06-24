@@ -6,8 +6,10 @@ import '../models/unit.dart';
 
 class InventoryItemWidget extends StatefulWidget {
   final InventoryItem inventoryItem;
+  final Function() onChangeItem;
 
-  const InventoryItemWidget(this.inventoryItem, {super.key});
+  const InventoryItemWidget(this.inventoryItem,
+      {super.key, required this.onChangeItem});
 
   @override
   State<StatefulWidget> createState() => _InventoryItemWidgetState();
@@ -53,6 +55,7 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
     setState(() {
       widget.inventoryItem;
     });
+    widget.onChangeItem();
   }
 
   List<DropdownMenuItem<String>> _units() {
