@@ -72,12 +72,12 @@ class _InventoryChangesWidgetState extends State<InventoryChangesWidget> {
               ElevatedButton.icon(
                 onPressed: widget.onPressAbort,
                 icon: const Icon(Icons.refresh),
-                label: const Text("Abort"),
+                label: const Text("Wiederholen"),
               ),
               ElevatedButton.icon(
                 onPressed: _addProducts,
                 icon: const Icon(Icons.check),
-                label: const Text("Add Products To Inventory"),
+                label: const Text("Zu Inventar hinzufügen"),
               )
             ],
           ),

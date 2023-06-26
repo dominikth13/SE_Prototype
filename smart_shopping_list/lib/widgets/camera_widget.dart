@@ -203,12 +203,12 @@ class _CameraWidgetState extends State<CameraWidget>
               ElevatedButton.icon(
                 onPressed: _resetImage,
                 icon: const Icon(Icons.refresh),
-                label: const Text("Try again"),
+                label: const Text("Wiederholen"),
               ),
               ElevatedButton.icon(
                 onPressed: _scanImage,
                 icon: const Icon(Icons.check),
-                label: const Text("Accept"),
+                label: const Text("Scannen"),
               )
             ],
           ),
@@ -268,7 +268,7 @@ class _CameraWidgetState extends State<CameraWidget>
   Widget _settingsWidget() {
     return _showSettings
         ? Expanded(
-            flex: 3,
+            flex: 6,
             child: Column(
               children: [
                 _modeControlRowWidget(),
@@ -589,9 +589,9 @@ class _CameraWidgetState extends State<CameraWidget>
 
     if (widget.cameras.isEmpty) {
       SchedulerBinding.instance.addPostFrameCallback((_) async {
-        showInSnackBar('No camera found.');
+        showInSnackBar('Keine Kamera gefunden.');
       });
-      return const Text('None');
+      return const Text('Nichts');
     } else {
       for (final CameraDescription cameraDescription in widget.cameras) {
         toggles.add(
@@ -624,8 +624,8 @@ class _CameraWidgetState extends State<CameraWidget>
     } else if (cameraDescription != null) {
       return _initializeCameraController(cameraDescription);
     } else {
-      throw CameraException(
-          "No camera available", "Your device contain no selectable camera.");
+      throw CameraException("Keine Kamera verfügbar",
+          "Dein Gerät besitzt keine verfügbare Kamera.");
     }
   }
 
@@ -646,8 +646,7 @@ class _CameraWidgetState extends State<CameraWidget>
         setState(() {});
       }
       if (cameraController.value.hasError) {
-        showInSnackBar(
-            'Camera error ${cameraController.value.errorDescription}');
+        showInSnackBar('Fehler: ${cameraController.value.errorDescription}');
       }
     });
 
@@ -674,26 +673,26 @@ class _CameraWidgetState extends State<CameraWidget>
     } on CameraException catch (e) {
       switch (e.code) {
         case 'CameraAccessDenied':
-          showInSnackBar('You have denied camera access.');
+          showInSnackBar('Der Zugriff auf die Kamera wurde verweigert.');
           break;
         case 'CameraAccessDeniedWithoutPrompt':
           // iOS only
-          showInSnackBar('Please go to Settings app to enable camera access.');
+          showInSnackBar('Bitte erlaube den Zugriff auf deine Kamera.');
           break;
         case 'CameraAccessRestricted':
           // iOS only
-          showInSnackBar('Camera access is restricted.');
+          showInSnackBar('Der Zugriff auf die Kamera ist eingeschränkt.');
           break;
         case 'AudioAccessDenied':
-          showInSnackBar('You have denied audio access.');
+          showInSnackBar('Der Zugriff auf das Mikrofon wurde verweigert.');
           break;
         case 'AudioAccessDeniedWithoutPrompt':
           // iOS only
-          showInSnackBar('Please go to Settings app to enable audio access.');
+          showInSnackBar('Bitte erlaube den Zugriff auf dein Mikrofon.');
           break;
         case 'AudioAccessRestricted':
           // iOS only
-          showInSnackBar('Audio access is restricted.');
+          showInSnackBar('Der Zugriff auf das Mikrofon ist eingeschränkt.');
           break;
         default:
           _showCameraException(e);

@@ -29,12 +29,7 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
   @override
   void initState() {
     super.initState();
-    _nameController.text = widget.inventoryItem.product.name;
-    _brandController.text = widget.inventoryItem.product.brand;
-    _unitValue = widget.inventoryItem.product.unit.code;
-    _sizeController.text = widget.inventoryItem.product.size.toString();
-    _remainingController.text =
-        widget.inventoryItem.getRemainingSize().toString();
+    _resetController();
   }
 
   @override
@@ -45,6 +40,20 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
     _sizeController.dispose();
     _remainingController.dispose();
     super.dispose();
+  }
+
+  void _resetController() {
+    _nameController.text = widget.inventoryItem.product.name;
+    _brandController.text = widget.inventoryItem.product.brand;
+    _unitValue = widget.inventoryItem.product.unit.code;
+    _sizeController.text = widget.inventoryItem.product.size.toString();
+    _remainingController.text =
+        widget.inventoryItem.getRemainingSize().toString();
+  }
+
+  void _cancel() {
+    Navigator.pop(context);
+    _resetController();
   }
 
   void _changeValues() {
@@ -60,7 +69,9 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
           product.unit, product.size, ItemState.EMPTY));
       widget.onChangeItem(widget.inventoryItem);
     }
+
     Navigator.pop(context);
+    _resetController();
 
     setState(() {
       widget.inventoryItem;
@@ -105,7 +116,7 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
                 decoration: const InputDecoration(
                   constraints: BoxConstraints(maxWidth: 100),
                   border: OutlineInputBorder(),
-                  labelText: "Brand",
+                  labelText: "Marke",
                 ),
               ),
             ),
@@ -116,7 +127,7 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
                   decoration: const InputDecoration(
                     constraints: BoxConstraints(maxWidth: 100),
                     border: OutlineInputBorder(),
-                    labelText: "Unit",
+                    labelText: "Einheit",
                   ),
                   items: _units(),
                   value: _unitValue,
@@ -131,7 +142,7 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
                 decoration: const InputDecoration(
                   constraints: BoxConstraints(maxWidth: 100),
                   border: OutlineInputBorder(),
-                  labelText: "Size",
+                  labelText: "Größe",
                 ),
               ),
             ),
@@ -141,7 +152,7 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
                 decoration: const InputDecoration(
                   constraints: BoxConstraints(maxWidth: 100),
                   border: OutlineInputBorder(),
-                  labelText: "Remaining",
+                  labelText: "Noch vorhanden",
                 ),
               ),
             ),
@@ -149,8 +160,12 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
         ),
         actions: [
           TextButton(
+            onPressed: _cancel,
+            child: const Text("Abbrechen"),
+          ),
+          TextButton(
             onPressed: _changeValues,
-            child: const Text('Approve'),
+            child: const Text("Speichern"),
           ),
         ],
       ),
@@ -189,10 +204,9 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
               trailing: ButtonBar(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton.icon(
+                  IconButton(
                     onPressed: _showEditDialog,
                     icon: const Icon(Icons.edit),
-                    label: const Text(""),
                   ),
                 ],
               ),

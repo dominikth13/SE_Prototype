@@ -57,6 +57,7 @@ class _InventoryWidgetState extends State<InventoryWidget> {
       children: <Widget>[
         SearchBar(
           onChanged: _onChangeSearchBar,
+          hintText: "Produktname, Marke etc.",
         ),
         Expanded(
           child: ListView(

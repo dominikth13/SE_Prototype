@@ -57,7 +57,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.add_task),
-            Text("Added"),
+            Text("Hinzugefügt"),
           ],
         );
       case ItemState.MAYBE_EMPTY:
@@ -66,7 +66,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.question_mark),
-            Text("Maybe\nempty"),
+            Text("Eventuell\nleer"),
           ],
         );
       default:
@@ -75,7 +75,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.disabled_by_default),
-            Text("Empty"),
+            Text("Leer"),
           ],
         );
     }

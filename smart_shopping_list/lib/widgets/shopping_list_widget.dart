@@ -111,7 +111,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                padding: EdgeInsets.fromLTRB(10, 5, 5, 5),
                 child: SizedBox(
                   width: 300,
                   child: DropDownTextField(
@@ -119,11 +119,16 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
                     enableSearch: true,
                     controller: _svdc,
                     dropDownItemCount: 4,
+                    searchDecoration:
+                        InputDecoration(hintText: "Produktname, Marke etc."),
+                    textFieldDecoration: InputDecoration(
+                        hintText: "Produktname, Marke etc.",
+                        constraints: BoxConstraints(maxWidth: 200)),
                   ),
                 ),
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                padding: EdgeInsets.fromLTRB(10, 5, 5, 5),
                 child: ElevatedButton(
                   onPressed: _addProduct,
                   style: ElevatedButton.styleFrom(

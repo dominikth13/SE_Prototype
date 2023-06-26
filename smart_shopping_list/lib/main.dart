@@ -87,9 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _title() {
     final titleOptions = [
-      "Shopping List",
-      "Your Inventory",
-      "Add Products",
+      "Einkaufsliste",
+      "Dein Inventar",
+      "Smart Scanner",
     ];
     return titleOptions.elementAt(_selectedIndex);
   }
@@ -129,10 +129,11 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag), label: "Shopping List"),
+              icon: Icon(Icons.shopping_bag), label: "Einkaufsliste"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.inventory), label: "Your Inventory"),
-          BottomNavigationBarItem(icon: Icon(Icons.camera_alt), label: "Scan")
+              icon: Icon(Icons.inventory), label: "Dein Inventar"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt), label: "Smart Scanner")
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
