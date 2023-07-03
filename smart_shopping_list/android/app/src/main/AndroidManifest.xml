@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smart_shopping_list">
    <application
-        android:label="smart_shopping_list"
+        android:label="Shopventory"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

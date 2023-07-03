@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Smart Shopping List',
+      title: 'Shopventory',
       theme: ThemeData(
         // This is the theme of your application.
         //

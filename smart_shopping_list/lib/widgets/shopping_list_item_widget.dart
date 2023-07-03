@@ -34,7 +34,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
     _delete();
     Product product = widget.shoppingListItem.product;
     MyApp.inventory.add(InventoryItem.forTesting(
-        product.brand, product.brand, product.unit, product.size, 0.2));
+        product.name, product.brand, product.unit, product.size, 0.2));
     setState(() {
       MyApp.inventory;
     });
