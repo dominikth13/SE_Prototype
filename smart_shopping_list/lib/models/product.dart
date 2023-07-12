@@ -10,7 +10,7 @@ class Product implements Comparable {
   Product(this.name, this.brand, this.unit, this.size);
 
   String toString() {
-    return "$name ($brand)\n $size ${unit.code}(s)";
+    return "$name ($brand)\n $size ${unit.code}";
   }
 
   @override

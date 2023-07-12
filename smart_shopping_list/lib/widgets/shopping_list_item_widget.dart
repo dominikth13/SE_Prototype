@@ -62,12 +62,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
         );
       case ItemState.MAYBE_EMPTY:
         return const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.question_mark),
-            Text("Eventuell\nleer"),
-          ],
+          mainAxisSize: MainAxisSize.min,
         );
       default:
         return const Column(
@@ -87,12 +82,22 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
         return ButtonBar(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.close),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.red, // <-- Button color
+                foregroundColor: Colors.white, // <-- Splash color
+              ),
+              child: const Icon(Icons.remove_circle_outline),
               onPressed: _removeSuggestion,
             ),
-            IconButton(
-              icon: const Icon(Icons.check),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.blue, // <-- Button color
+                foregroundColor: Colors.white, // <-- Splash color
+              ),
+              child: const Icon(Icons.add_shopping_cart),
               onPressed: _addSuggestion,
             ),
           ],
@@ -101,8 +106,13 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
         return ButtonBar(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.delete),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.red, // <-- Button color
+                foregroundColor: Colors.white, // <-- Splash color
+              ),
+              child: const Icon(Icons.delete_forever),
               onPressed: _delete,
             ),
           ],
@@ -111,23 +121,43 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
   }
 
   Color _tileColor() {
-    switch (widget.shoppingListItem.state) {
-      case ItemState.EMPTY:
-        return const Color.fromARGB(178, 141, 25, 7);
-      case ItemState.MAYBE_EMPTY:
-        return const Color.fromRGBO(228, 130, 3, 0.575);
-      default:
-        return const Color.fromARGB(142, 33, 149, 243);
-    }
+    return const Color.fromARGB(142, 33, 149, 243);
   }
 
   Color _textColor() {
-    switch (widget.shoppingListItem.state) {
-      case ItemState.EMPTY:
-        return Colors.white;
-      default:
-        return Colors.black;
+    return Colors.white;
+  }
+
+  ListTile _tile() {
+    if (widget.shoppingListItem.state == ItemState.MAYBE_EMPTY) {
+      return ListTile(
+        title: Text(widget.shoppingListItem.product.name),
+        subtitle: Text(widget.shoppingListItem.product.brand),
+        tileColor: _tileColor(),
+        textColor: _textColor(),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+                bottomRight: Radius.circular(5),
+                bottomLeft: Radius.circular(5))),
+        trailing: _iconButton(),
+      );
     }
+    return ListTile(
+      title: Text(widget.shoppingListItem.product.name),
+      subtitle: Text(widget.shoppingListItem.product.brand),
+      tileColor: _tileColor(),
+      textColor: _textColor(),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(5),
+              topRight: Radius.circular(5),
+              bottomRight: Radius.circular(5),
+              bottomLeft: Radius.circular(5))),
+      trailing: _iconButton(),
+      leading: _icon(),
+    );
   }
 
   @override
@@ -136,19 +166,7 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: ListTile(
-                title: Text(widget.shoppingListItem.product.name),
-                subtitle: Text(widget.shoppingListItem.product.brand),
-                tileColor: _tileColor(),
-                textColor: _textColor(),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        topRight: Radius.circular(5),
-                        bottomRight: Radius.circular(5),
-                        bottomLeft: Radius.circular(5))),
-                trailing: _iconButton(),
-                leading: _icon()),
+            child: _tile(),
           )
         ],
       ),

@@ -21,12 +21,20 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
       TextEditingController();
   final SingleValueDropDownController _svdc = SingleValueDropDownController();
   List<ShoppingListItem> _items = [];
+  List<ShoppingListItem> _meitems = [];
 
   @override
   void initState() {
     super.initState();
 
     _items = _sortedItems();
+    _meitems = _maybeEmpty();
+
+    if (!_meitems.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _showSimpleModalDialog();
+      });
+    }
   }
 
   void _addProduct() {
@@ -47,8 +55,10 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
   void _onChangeItems() {
     _items = _sortedItems();
+    _meitems = _maybeEmpty();
     setState(() {
       _items;
+      _meitems;
     });
   }
 
@@ -75,15 +85,71 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
 
     return _optionMock
         .map((e) => DropDownValueModel(
-            name: e.toString(), value: e, toolTipMsg: "Moin"))
+              name: e.toString(),
+              value: e,
+            ))
         .toList();
   }
 
   List<ShoppingListItem> _sortedItems() {
     List<ShoppingListItem> items = List.from(MyApp.shoppingList);
     items.sort();
+    items.removeWhere((element) => element.state == ItemState.MAYBE_EMPTY);
 
     return items;
+  }
+
+  List<ShoppingListItem> _maybeEmpty() {
+    List<ShoppingListItem> items = [];
+    for (ShoppingListItem item in List.of(MyApp.shoppingList)) {
+      if (item.state == ItemState.MAYBE_EMPTY) {
+        items.add(item);
+      }
+    }
+    items.sort();
+
+    return items;
+  }
+
+  _showSimpleModalDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setModalState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                constraints: BoxConstraints(maxHeight: 350),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(children: [
+                    Text("Die folgenden Produkte sind evetuell leer:",
+                        style: TextStyle(fontSize: 18)),
+                    Expanded(
+                      child: ListView(
+                        children: _meitems
+                            .map((e) =>
+                                ShoppingListItemWidget(e, onChangeItem: () {
+                                  _onChangeItems();
+                                  setModalState(
+                                    () {
+                                      _meitems;
+                                    },
+                                  );
+                                  if (_meitems.isEmpty) {
+                                    Navigator.pop(context);
+                                  }
+                                }))
+                            .toList(),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            );
+          });
+        });
   }
 
   @override
@@ -92,7 +158,7 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
       children: <Widget>[
         Expanded(
           child: ListView(
-            children: _items
+            children: _sortedItems()
                 .map((e) =>
                     ShoppingListItemWidget(e, onChangeItem: _onChangeItems))
                 .toList(),

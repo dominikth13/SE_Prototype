@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _title() {
     final titleOptions = [
       "Einkaufsliste",
-      "Dein Inventar",
+      "Mein Inventar",
       "Smart Scanner",
     ];
     return titleOptions.elementAt(_selectedIndex);
