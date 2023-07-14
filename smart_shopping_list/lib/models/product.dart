@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:ffi';
+
+import 'package:smart_shopping_list/models/inventory_filter.dart';
 import 'package:smart_shopping_list/models/unit.dart';
 
 class Product implements Comparable {
@@ -26,5 +28,18 @@ class Product implements Comparable {
     }
 
     return size - otherProduct.size as int;
+  }
+
+  InventoryFilter getFilter() {
+    if (name.contains("Cola") ||
+        name.contains("mehl") ||
+        name.contains("papier") ||
+        name.contains("bären")) {
+      return InventoryFilter.UTILITY_ROOM;
+    } else if (name.contains("milch")) {
+      return InventoryFilter.FRIDGE;
+    }
+
+    return InventoryFilter.ALL;
   }
 }

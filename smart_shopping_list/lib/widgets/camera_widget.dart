@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:smart_shopping_list/models/inventory_item.dart';
+import 'package:smart_shopping_list/models/product.dart';
 import 'package:smart_shopping_list/widgets/inventory_changes_widget.dart';
 
 import '../models/unit.dart';
@@ -875,10 +876,13 @@ class _CameraWidgetState extends State<CameraWidget>
   }
 
   void _scanImage() {
-    _scannedItems = [
-      InventoryItem("Cola", "Coca-Cola", Unit.LITRE, 0.5),
-      InventoryItem("Vollmilch", "Milbona", Unit.PART, 1),
+    List<Product> products = [
+      Product("Cola", "Coca-Cola", Unit.LITRE, 0.5),
+      Product("Vollmilch", "Milbona", Unit.PART, 1),
     ];
+    _scannedItems = products
+        .map((product) => InventoryItem.ofProduct(product, product.getFilter()))
+        .toList();
     _showChanges = true;
 
     setState(() {

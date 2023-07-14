@@ -1,15 +1,19 @@
+import 'package:smart_shopping_list/models/inventory_filter.dart';
 import 'package:smart_shopping_list/models/product.dart';
 import 'package:smart_shopping_list/models/unit.dart';
 
 class InventoryItem implements Comparable {
   late Product product;
   double remainingAmount = 1;
+  InventoryFilter storageLocation;
 
-  InventoryItem(String name, String brand, Unit unit, double size) {
+  InventoryItem.ofProduct(this.product, this.storageLocation);
+  InventoryItem(
+      String name, String brand, Unit unit, double size, this.storageLocation) {
     product = Product(name, brand, unit, size);
   }
-  InventoryItem.forTesting(
-      String name, String brand, Unit unit, double size, this.remainingAmount) {
+  InventoryItem.forTesting(String name, String brand, Unit unit, double size,
+      this.remainingAmount, this.storageLocation) {
     product = Product(name, brand, unit, size);
   }
 

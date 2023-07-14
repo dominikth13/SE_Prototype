@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_shopping_list/models/inventory_filter.dart';
 import 'package:smart_shopping_list/models/inventory_item.dart';
 import 'package:smart_shopping_list/models/shopping_list_item.dart';
 import 'package:smart_shopping_list/widgets/camera_widget.dart';
+import 'package:smart_shopping_list/widgets/inventory_overview_widget.dart';
 import 'package:smart_shopping_list/widgets/inventory_widget.dart';
 import 'package:smart_shopping_list/widgets/shopping_list_widget.dart';
 
@@ -24,8 +26,22 @@ class MyApp extends StatelessWidget {
 
   final List<CameraDescription> cameras;
   static List<InventoryItem> inventory = [
-    InventoryItem("Staubmagnet Ersatztücher", "Swiffer", Unit.PART, 20),
-    InventoryItem.forTesting("Strauchtomaten", "Lidl", Unit.GRAM, 300, 0.75),
+    InventoryItem("Staubmagnet Ersatztücher", "Swiffer", Unit.PART, 20,
+        InventoryFilter.UTILITY_ROOM),
+    InventoryItem.forTesting(
+        "Strauchtomaten", "Lidl", Unit.GRAM, 300, 0.75, InventoryFilter.FRIDGE),
+    InventoryItem.forTesting("Waschmittel Renew Schwarz", "Perwoll", Unit.LITRE,
+        1.375, 0.5, InventoryFilter.BATHROOM),
+    InventoryItem.forTesting("Spaghetti", "REWE Beste Wahl", Unit.GRAM, 500,
+        0.2, InventoryFilter.UTILITY_ROOM),
+    InventoryItem.forTesting(
+        "Actimel", "Danone", Unit.PART, 8, 0.75, InventoryFilter.FRIDGE),
+    InventoryItem(
+        "Salami", "Wilhelm Brandenburg", Unit.GRAM, 80, InventoryFilter.FRIDGE),
+    InventoryItem("Stickado Pikanto Salami Sticks", "Aoste", Unit.GRAM, 70,
+        InventoryFilter.UTILITY_ROOM),
+    InventoryItem("Feuchtes Toilettenpapier Sensitiv", "REWE Beste Wahl",
+        Unit.PART, 43, InventoryFilter.BATHROOM),
   ];
   static List<ShoppingListItem> shoppingList = [
     ShoppingListItem("Butter", "Kerrygold", Unit.GRAM, 250, ItemState.EMPTY),
@@ -85,6 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   bool _showCamera = false;
 
+  bool _goToInventory = false;
+
   String _title() {
     final titleOptions = [
       "Einkaufsliste",
@@ -97,11 +115,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _page() {
     final widgetOptions = [
       const ShoppingListWidget(),
-      const InventoryWidget(),
+      _inventory(),
       CameraWidget(
         cameras: widget.cameras,
         show: _showCamera,
-        proceedToInventory: () => _onItemTapped(1),
+        proceedToInventory: _openInventoryDirectly,
       ),
     ];
     return widgetOptions.elementAt(_selectedIndex);
@@ -111,6 +129,19 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _openInventoryDirectly() {
+    _goToInventory = true;
+    _onItemTapped(1);
+  }
+
+  Widget _inventory() {
+    if (_goToInventory) {
+      _goToInventory = false;
+      return InventoryOverviewWidget(goToInventory: true);
+    }
+    return InventoryOverviewWidget(goToInventory: false);
   }
 
   @override
@@ -131,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag), label: "Einkaufsliste"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.inventory), label: "Dein Inventar"),
+              icon: Icon(Icons.inventory), label: "Mein Inventar"),
           BottomNavigationBarItem(
               icon: Icon(Icons.camera_alt), label: "Smart Scanner")
         ],

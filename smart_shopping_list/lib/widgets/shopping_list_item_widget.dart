@@ -33,8 +33,8 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
   void _removeSuggestion() {
     _delete();
     Product product = widget.shoppingListItem.product;
-    MyApp.inventory.add(InventoryItem.forTesting(
-        product.name, product.brand, product.unit, product.size, 0.2));
+    MyApp.inventory.add(InventoryItem.forTesting(product.name, product.brand,
+        product.unit, product.size, 0.2, product.getFilter()));
     setState(() {
       MyApp.inventory;
     });
