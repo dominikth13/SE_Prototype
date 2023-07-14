@@ -136,11 +136,13 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
         tileColor: _tileColor(),
         textColor: _textColor(),
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-                bottomRight: Radius.circular(5),
-                bottomLeft: Radius.circular(5))),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(5),
+            topRight: Radius.circular(5),
+            bottomRight: Radius.circular(5),
+            bottomLeft: Radius.circular(5),
+          ),
+        ),
         trailing: _iconButton(),
       );
     }
@@ -150,11 +152,13 @@ class _ShoppingListItemWidgetState extends State<ShoppingListItemWidget> {
       tileColor: _tileColor(),
       textColor: _textColor(),
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5),
-              topRight: Radius.circular(5),
-              bottomRight: Radius.circular(5),
-              bottomLeft: Radius.circular(5))),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
+          bottomRight: Radius.circular(5),
+          bottomLeft: Radius.circular(5),
+        ),
+      ),
       trailing: _iconButton(),
       leading: _icon(),
     );

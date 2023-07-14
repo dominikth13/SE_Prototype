@@ -204,9 +204,14 @@ class _InventoryItemWidgetState extends State<InventoryItemWidget> {
               trailing: ButtonBar(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.blue, // <-- Button color
+                      foregroundColor: Colors.white, // <-- Splash color
+                    ),
+                    child: const Icon(Icons.edit),
                     onPressed: _showEditDialog,
-                    icon: const Icon(Icons.edit),
                   ),
                 ],
               ),

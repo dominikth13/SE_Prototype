@@ -123,28 +123,35 @@ class _ShoppingListWidgetState extends State<ShoppingListWidget> {
                 constraints: BoxConstraints(maxHeight: 350),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Column(children: [
-                    Text("Die folgenden Produkte sind evetuell leer:",
-                        style: TextStyle(fontSize: 18)),
-                    Expanded(
-                      child: ListView(
-                        children: _meitems
-                            .map((e) =>
-                                ShoppingListItemWidget(e, onChangeItem: () {
-                                  _onChangeItems();
-                                  setModalState(
-                                    () {
-                                      _meitems;
-                                    },
-                                  );
-                                  if (_meitems.isEmpty) {
-                                    Navigator.pop(context);
-                                  }
-                                }))
-                            .toList(),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Text(
+                          "Die folgenden Produkte sind eventuell leer. Füge sie der Einkaufsliste hinzu oder lege sie zurück in dein Inventar.",
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                  ]),
+                      Expanded(
+                        child: ListView(
+                          children: _meitems
+                              .map((e) =>
+                                  ShoppingListItemWidget(e, onChangeItem: () {
+                                    _onChangeItems();
+                                    setModalState(
+                                      () {
+                                        _meitems;
+                                      },
+                                    );
+                                    if (_meitems.isEmpty) {
+                                      Navigator.pop(context);
+                                    }
+                                  }))
+                              .toList(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
