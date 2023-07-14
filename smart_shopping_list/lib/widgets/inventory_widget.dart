@@ -33,14 +33,14 @@ class _InventoryWidgetState extends State<InventoryWidget> {
     return items;
   }
 
-  void _onChangeSearchBar(query) {
+  void _onChangeSearchBar(String query) {
     if (query == "") {
       _itemsRendered = _filteredList();
     } else {
       _itemsRendered = _filteredList();
       _itemsRendered.retainWhere((element) =>
-          element.product.name.contains(query) ||
-          element.product.brand.contains(query));
+          element.product.name.toLowerCase().contains(query.toLowerCase()) ||
+          element.product.brand.toLowerCase().contains(query.toLowerCase()));
     }
 
     _onChangeItemsRendered(null);
