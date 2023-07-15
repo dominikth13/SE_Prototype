@@ -17,8 +17,12 @@ class InventoryItem implements Comparable {
     product = Product(name, brand, unit, size);
   }
 
-  double getRemainingSize() {
-    return remainingAmount * product.size;
+  getRemainingSize() {
+    double remainingSize = remainingAmount * product.size;
+    if (product.unit == Unit.PART) {
+      return remainingSize.toInt();
+    }
+    return remainingSize;
   }
 
   void setRemainingAmountBySize(double remainingSize) {

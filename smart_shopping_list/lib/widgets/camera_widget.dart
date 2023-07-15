@@ -877,8 +877,7 @@ class _CameraWidgetState extends State<CameraWidget>
 
   void _scanImage() {
     List<Product> products = [
-      Product("Cola", "Coca-Cola", Unit.LITRE, 0.5),
-      Product("Vollmilch", "Milbona", Unit.PART, 1),
+      Product("Kellerbier 0,5l", "Zwick'l", Unit.PART, 20),
     ];
     _scannedItems = products
         .map((product) => InventoryItem.ofProduct(product, product.getFilter()))
